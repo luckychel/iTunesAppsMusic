@@ -47,7 +47,7 @@ class AppDetailHeaderViewController: UIViewController {
     }
     
     @objc func openButtonTapped(sender: UIButton!) {
-        if let url = URL(string: app.appUrl ?? "") {
+        if let url = URL(string: app.appPageUrl ?? "") {
             UIApplication.shared.open(url)
         }
     }

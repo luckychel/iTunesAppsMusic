@@ -2,8 +2,8 @@
 //  ITunesSong.swift
 //  iOSArchitecturesDemo
 //
-//  Created by ekireev on 19.02.2018.
-//  Copyright © 2018 ekireev. All rights reserved.
+//  Created by Александр Кукоба on 14.04.2023.
+//  Copyright © 2023 ekireev. All rights reserved.
 //
 
 import UIKit
@@ -14,6 +14,7 @@ public struct ITunesSong: Codable {
     public var artistName: String?
     public var collectionName: String?
     public var artwork: String?
+    public var trackUrl: String?
     
     // MARK: - Codable
     
@@ -22,6 +23,7 @@ public struct ITunesSong: Codable {
         case artistName = "artistName"
         case collectionName = "collectionName"
         case artwork = "artworkUrl100"
+        case trackUrl = "trackViewUrl"
     }
     
     // MARK: - Init
@@ -29,10 +31,12 @@ public struct ITunesSong: Codable {
     internal init(trackName: String,
                   artistName: String?,
                   collectionName: String?,
-                  artwork: String?) {
+                  artwork: String?,
+                  trackUrl: String?) {
         self.trackName = trackName
         self.artistName = artistName
         self.collectionName = collectionName
         self.artwork = artwork
+        self.trackUrl = trackUrl
     }
 }
