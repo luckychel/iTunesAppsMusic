@@ -7,6 +7,5 @@ target 'iOSArchitecturesDemo' do
 
   # Pods for iOSArchitecturesDemo
   pod 'Alamofire', '~> 4.6'
-  pod 'Kingfisher'
 
 end

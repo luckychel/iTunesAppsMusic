@@ -50,8 +50,6 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Music", style: .plain, target: self, action: #selector(toMusicTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .white
         self.searchView.searchBar.delegate = self
         self.searchView.tableView.register(AppCell.self, forCellReuseIdentifier: Constants.reuseIdentifier)
         self.searchView.tableView.delegate = self
@@ -64,10 +62,6 @@ final class SearchViewController: UIViewController {
     }
     
     // MARK: - Private
-    
-    @objc private func toMusicTapped() {
-        ScreenManager.shared.openMusicSearch()
-    }
     
     func throbber(show: Bool) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = show

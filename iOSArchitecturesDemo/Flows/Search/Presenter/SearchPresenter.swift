@@ -9,7 +9,8 @@
 import UIKit
 import Alamofire
 
-protocol SearchViewInput {
+protocol SearchViewInput: class {
+    
     var searchResults: [ITunesApp] { get set }
     func showError(error: Error)
     func hideNoResults()
