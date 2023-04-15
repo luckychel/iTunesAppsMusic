@@ -13,17 +13,24 @@ final class ScreenManager {
     static let shared = ScreenManager()
     private init() {}
     
-    var window: UIWindow?
-    
     private enum Screens {
         case appSearch
         case musicSearch
     }
     private var currentScreen: Screens = .appSearch
     
-    func openAppSearch() {
-        guard let window = window else { return }
+    private lazy var configuredNavigationController: UINavigationController = {
+        let navVC = UINavigationController()
+        navVC.navigationBar.barTintColor = UIColor.varna
+        navVC.navigationBar.isTranslucent = false
+        navVC.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navVC.modalTransitionStyle = .flipHorizontal
         
+        return navVC
+    }()
+    
+    func appStart(window: UIWindow) {
         currentScreen = .appSearch
         let rootVC = SearchBuilder.build()
         rootVC.navigationItem.title = "Search iTunes Apps"
@@ -33,46 +40,34 @@ final class ScreenManager {
         
         window.rootViewController = navVC
         window.makeKeyAndVisible()
-        performAnimation()
+    }
+    
+    func openAppSearch() {
+        currentScreen = .appSearch
+        let rootVC = SearchBuilder.build()
+        rootVC.navigationItem.title = "Search iTunes Apps"
+        
+        UIView.transition(
+            with: configuredNavigationController.view,
+            duration: 0.4,
+            options: .transitionFlipFromLeft,
+            animations: {
+                self.configuredNavigationController.setViewControllers([rootVC], animated: true)
+            }, completion: nil)
     }
     
     func openMusicSearch() {
-        guard let window = window else { return }
         
         currentScreen = .musicSearch
         let rootVC = SearchMusicBuilder.build()
         rootVC.navigationItem.title = "Search iTunes Music"
         
-        let navVC = self.configuredNavigationController
-        navVC.viewControllers = [rootVC]
-        
-        window.rootViewController = navVC
-        window.makeKeyAndVisible()
-        performAnimation()
+        UIView.transition(
+            with: configuredNavigationController.view,
+            duration: 0.4,
+            options: .transitionFlipFromRight,
+            animations: {
+                self.configuredNavigationController.setViewControllers([rootVC], animated: true)
+            }, completion: nil)
     }
-    
-    private func performAnimation() {
-        guard let window = window else { return }
-        
-        let options: UIView.AnimationOptions
-        
-        switch currentScreen {
-        case .appSearch:
-            options = .transitionFlipFromLeft
-        case .musicSearch:
-            options = .transitionFlipFromRight
-        }
-
-        let duration: TimeInterval = 0.3
-        UIView.transition(with: window, duration: duration, options: options, animations: {}, completion: {_ in })
-    }
-    
-    private lazy var configuredNavigationController: UINavigationController = {
-        let navVC = UINavigationController()
-        navVC.navigationBar.barTintColor = UIColor.varna
-        navVC.navigationBar.isTranslucent = false
-        navVC.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        return navVC
-    }()
 }

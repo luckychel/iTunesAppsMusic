@@ -66,7 +66,7 @@ final class SearchViewController: UIViewController {
     // MARK: - Private
     
     @objc private func toMusicTapped() {
-        ScreenManager.shared.openMusicSearch()
+        presenter.viewDidMoveToSongSearch()
     }
     
     func throbber(show: Bool) {
@@ -96,9 +96,7 @@ final class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController: SearchViewInput {
-    
-}
+extension SearchViewController: SearchViewInput { }
 
 //MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {

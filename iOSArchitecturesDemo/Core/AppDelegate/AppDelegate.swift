@@ -16,8 +16,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        ScreenManager.shared.window = window
-        ScreenManager.shared.openAppSearch()
+        if let window = window {
+            ScreenManager.shared.appStart(window: window)
+        }
 
         return true
     }

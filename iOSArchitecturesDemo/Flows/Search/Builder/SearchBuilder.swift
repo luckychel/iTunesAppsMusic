@@ -2,8 +2,8 @@
 //  SearchBuilder.swift
 //  iOSArchitecturesDemo
 //
-//  Created by Evgenii Semenov on 11.03.2021.
-//  Copyright © 2021 ekireev. All rights reserved.
+//  Created by Александр Кукоба on 15.04.2023.
+//  Copyright © 2023 ekireev. All rights reserved.
 //
 
 import UIKit

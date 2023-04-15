@@ -20,37 +20,42 @@ protocol SearchMusicViewInput {
 protocol SearchMusicViewOutput {
     func viewDidSearch(with query: String)
     func viewDidSelectSong(_ song: ITunesSong)
+    func viewDidMoveToAppSearch()
 }
 
 class SearchMusicPresenter {
-    private let searchService = ITunesSearchService()
+    let interactor: SearchMusicInteractorInput
+    let router: SearchMusicRouterInput
     
     weak var viewInput: (UIViewController & SearchMusicViewInput)?
     
+    init(interactor: SearchMusicInteractorInput, router: SearchMusicRouterInput) {
+        self.interactor = interactor
+        self.router = router
+    }
+    
     private func requestMusic(with query: String) {
-        self.searchService.getSongs(forQuery: query) { [weak self] result in
+        interactor.requestSongs(with: query) { [weak self] (result) in
             guard let self = self else { return }
             
             self.viewInput?.throbber(show: false)
-            result
-                .withValue { songs in
-                    guard !songs.isEmpty else {
-                        self.viewInput?.showNoResults()
-                        return
-                    }
-                    self.viewInput?.hideNoResults()
-                    self.viewInput?.searchResults = songs
+            result.withValue { (songs) in
+                guard !songs.isEmpty else {
+                    self.viewInput?.showNoResults()
+                    return
                 }
-                .withError {
-                    self.viewInput?.showError(error: $0)
-                }
+                self.viewInput?.hideNoResults()
+                self.viewInput?.searchResults = songs
+            }
+            .withError { (error) in
+                self.viewInput?.showError(error: error)
+            }
         }
     }
     
     private func openSongDetail(with song: ITunesSong) {
-        if let url = URL(string: song.trackUrl ?? "") {
-            UIApplication.shared.open(url)
-        }
+//        router.openSongInITunes(song: song)
+        router.openSongPlayer(with: song)
     }
 }
 
@@ -62,5 +67,9 @@ extension SearchMusicPresenter: SearchMusicViewOutput {
     
     func viewDidSelectSong(_ song: ITunesSong) {
         openSongDetail(with: song)
+    }
+    
+    func viewDidMoveToAppSearch() {
+        router.moveToAppSearch()
     }
 }

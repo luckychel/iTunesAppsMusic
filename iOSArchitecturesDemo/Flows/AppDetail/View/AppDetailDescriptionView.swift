@@ -28,13 +28,11 @@ class AppDetailDescriptionView: UIView {
     }()
     
     private(set) lazy var titleStackView: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [whatsNewLabel, versionHistoryButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalCentering
-        
-        stackView.addArrangedSubview(whatsNewLabel)
-        stackView.addArrangedSubview(versionHistoryButton)
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         return stackView
@@ -57,13 +55,11 @@ class AppDetailDescriptionView: UIView {
     }()
     
     private(set) lazy var versionStackView: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [versionLabel, versionDateLabel])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalCentering
-        
-        stackView.addArrangedSubview(versionLabel)
-        stackView.addArrangedSubview(versionDateLabel)
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         return stackView

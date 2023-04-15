@@ -2,14 +2,14 @@
 //  SearchPresenter.swift
 //  iOSArchitecturesDemo
 //
-//  Created by Evgenii Semenov on 11.03.2021.
-//  Copyright © 2021 ekireev. All rights reserved.
+//  Created by Александр Кукоба on 15.04.2023.
+//  Copyright © 2023 ekireev. All rights reserved.
 //
 
 import UIKit
 import Alamofire
 
-protocol SearchViewInput {
+protocol SearchViewInput: AnyObject {
     
     var searchResults: [ITunesApp] { get set }
     func showError(error: Error)
@@ -18,10 +18,11 @@ protocol SearchViewInput {
     func throbber(show: Bool)
 }
 
-protocol SearchViewOutput {
+protocol SearchViewOutput: AnyObject {
     
     func viewDidSearch(with query: String)
     func viewDidSelectApp(_ app: ITunesApp)
+    func viewDidMoveToSongSearch()
 }
 
 class SearchPresenter {
@@ -66,5 +67,9 @@ extension SearchPresenter: SearchViewOutput {
     
     func viewDidSelectApp(_ app: ITunesApp) {
         openAppDetail(with: app)
+    }
+    
+    func viewDidMoveToSongSearch() {
+        ScreenManager.shared.openMusicSearch()
     }
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 final class AppDetailViewController: UIViewController {
+    
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -17,13 +19,13 @@ final class AppDetailViewController: UIViewController {
 
         return scrollView
     }()
+    
     private lazy var contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
-    
 
     public var app: ITunesApp
     
@@ -80,7 +82,6 @@ final class AppDetailViewController: UIViewController {
     private func addChildViewController() {
         contentView.addSubview(headerDetailViewController.view)
         addChild(headerDetailViewController)
-        
         headerDetailViewController.didMove(toParent: self)
         
         headerDetailViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -95,7 +96,6 @@ final class AppDetailViewController: UIViewController {
     private func addDescriptionViewController() {
         contentView.addSubview(descriptionViewController.view)
         addChild(descriptionViewController)
-        
         descriptionViewController.didMove(toParent: self)
         
         descriptionViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +110,6 @@ final class AppDetailViewController: UIViewController {
     private func addScreenshotsViewController() {
         contentView.addSubview(screenshotsViewController.view)
         addChild(screenshotsViewController)
-        
         screenshotsViewController.didMove(toParent: self)
         
         screenshotsViewController.view.translatesAutoresizingMaskIntoConstraints = false

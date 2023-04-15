@@ -62,7 +62,7 @@ class SearchMusicViewController: UIViewController {
     // MARK: - Private
     
     @objc private func toAppsTapped() {
-        ScreenManager.shared.openAppSearch()
+        presenter.viewDidMoveToAppSearch()
     }
     
     func throbber(show: Bool) {
