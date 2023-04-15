@@ -1,38 +1,34 @@
 //
-//  ViewController.swift
+//  SearchMusicViewController.swift
 //  iOSArchitecturesDemo
 //
-//  Created by ekireev on 14.02.2018.
-//  Copyright © 2018 ekireev. All rights reserved.
+//  Created by Александр Кукоба on 15.04.2023.
+//  Copyright © 2023 ekireev. All rights reserved.
 //
 
 import UIKit
 
-final class SearchViewController: UIViewController {
+class SearchMusicViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var searchView: SearchView {
-        return self.view as! SearchView
+    private var searchMusicView: SearchMusicView {
+        return self.view as! SearchMusicView
     }
     
-    var searchResults = [ITunesApp]() {
+    var searchResults = [ITunesSong]() {
         didSet {
-            searchView.tableView.isHidden = false
-            searchView.tableView.reloadData()
-            searchView.searchBar.resignFirstResponder()
+            searchMusicView.tableView.isHidden = false
+            searchMusicView.tableView.reloadData()
+            searchMusicView.searchBar.resignFirstResponder()
         }
     }
     
-    private struct Constants {
-        static let reuseIdentifier = "reuseId"
-    }
-    
-    private let presenter: SearchViewOutput
+    private let presenter: SearchMusicViewOutput
     
     // MARK: - Lifecycle
     
-    init(presenter: SearchViewOutput) {
+    init(presenter: SearchMusicViewOutput) {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
@@ -44,18 +40,18 @@ final class SearchViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        self.view = SearchView()
+        self.view = SearchMusicView()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Music", style: .plain, target: self, action: #selector(toMusicTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apps", style: .plain, target: self, action: #selector(toAppsTapped))
         navigationItem.rightBarButtonItem?.tintColor = .white
-        self.searchView.searchBar.delegate = self
-        self.searchView.tableView.register(AppCell.self, forCellReuseIdentifier: Constants.reuseIdentifier)
-        self.searchView.tableView.delegate = self
-        self.searchView.tableView.dataSource = self
+        self.searchMusicView.searchBar.delegate = self
+        self.searchMusicView.tableView.register(SongCell.self, forCellReuseIdentifier: SongCell.reuseIdentifier)
+        self.searchMusicView.tableView.delegate = self
+        self.searchMusicView.tableView.dataSource = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,8 +61,8 @@ final class SearchViewController: UIViewController {
     
     // MARK: - Private
     
-    @objc private func toMusicTapped() {
-        ScreenManager.shared.openMusicSearch()
+    @objc private func toAppsTapped() {
+        ScreenManager.shared.openAppSearch()
     }
     
     func throbber(show: Bool) {
@@ -81,56 +77,55 @@ final class SearchViewController: UIViewController {
     }
     
     func showNoResults() {
-        self.searchView.tableView.isHidden = true
-        self.searchView.emptyResultView.isHidden = false
+        self.searchMusicView.tableView.isHidden = true
+        self.searchMusicView.emptyResultView.isHidden = false
     }
     
     func hideNoResults() {
-        self.searchView.emptyResultView.isHidden = true
+        self.searchMusicView.emptyResultView.isHidden = true
     }
     
-    private func requestApps(with query: String) {
+    private func requestMusic(with query: String) {
         presenter.viewDidSearch(with: query)
         self.searchResults = []
-        self.searchView.tableView.reloadData()
+        self.searchMusicView.tableView.reloadData()
     }
 }
 
-extension SearchViewController: SearchViewInput {
-    
-}
+extension SearchMusicViewController: SearchMusicViewInput { }
 
 //MARK: - UITableViewDataSource
-extension SearchViewController: UITableViewDataSource {
+extension SearchMusicViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: Constants.reuseIdentifier, for: indexPath)
-        guard let cell = dequeuedCell as? AppCell else {
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: SongCell.reuseIdentifier, for: indexPath)
+        guard let cell = dequeuedCell as? SongCell else {
             return dequeuedCell
         }
-        let app = self.searchResults[indexPath.row]
-        let cellModel = AppCellModelFactory.cellModel(from: app)
+        let song = self.searchResults[indexPath.row]
+        let cellModel = SongCellModelFactory.cellModel(from: song)
         cell.configure(with: cellModel)
+        
         return cell
     }
 }
 
 //MARK: - UITableViewDelegate
-extension SearchViewController: UITableViewDelegate {
+extension SearchMusicViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let app = searchResults[indexPath.row]
-        presenter.viewDidSelectApp(app)
+        let song = searchResults[indexPath.row]
+        presenter.viewDidSelectSong(song)
     }
 }
 
 //MARK: - UISearchBarDelegate
-extension SearchViewController: UISearchBarDelegate {
+extension SearchMusicViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchBar.text else {
@@ -141,6 +136,6 @@ extension SearchViewController: UISearchBarDelegate {
             searchBar.resignFirstResponder()
             return
         }
-        self.requestApps(with: query)
+        self.requestMusic(with: query)
     }
 }

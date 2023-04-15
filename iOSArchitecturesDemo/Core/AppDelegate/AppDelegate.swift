@@ -12,12 +12,13 @@ import UIKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var appStartManager: AppStartManager?
+    var appStartManager: ScreenManager?
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.appStartManager = AppStartManager(window: self.window)
-        self.appStartManager?.start()
+        ScreenManager.shared.window = window
+        ScreenManager.shared.openAppSearch()
+
         return true
     }
 }
